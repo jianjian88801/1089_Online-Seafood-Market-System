@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.HaixianDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.haixian_name as haixianName
+        ,a.haixian_photo as haixianPhoto
+        ,a.haixian_video as haixianVideo
+        ,a.haixian_types as haixianTypes
+        ,a.haixian_kucun_number as haixianKucunNumber
+        ,a.haixian_old_money as haixianOldMoney
+        ,a.haixian_new_money as haixianNewMoney
+        ,a.haixian_clicknum as haixianClicknum
+        ,a.shangxia_types as shangxiaTypes
+        ,a.haixian_delete as haixianDelete
+        ,a.haixian_content as haixianContent
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.HaixianView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM haixian  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.haixianName != '' and params.haixianName != null and params.haixianName != 'null' ">
+                and a.haixian_name like CONCAT('%',#{params.haixianName},'%')
+            </if>
+            <if test=" params.haixianVideo != '' and params.haixianVideo != null and params.haixianVideo != 'null' ">
+                and a.haixian_video like CONCAT('%',#{params.haixianVideo},'%')
+            </if>
+            <if test="params.haixianTypes != null and params.haixianTypes != ''">
+                and a.haixian_types = #{params.haixianTypes}
+            </if>
+            <if test="params.haixianKucunNumberStart != null and params.haixianKucunNumberStart != ''">
+                <![CDATA[  and a.haixian_kucun_number >= #{params.haixianKucunNumberStart}   ]]>
+            </if>
+            <if test="params.haixianKucunNumberEnd != null and params.haixianKucunNumberEnd != ''">
+                <![CDATA[  and a.haixian_kucun_number <= #{params.haixianKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.haixianKucunNumber != null and params.haixianKucunNumber != ''">
+                and a.haixian_kucun_number = #{params.haixianKucunNumber}
+             </if>
+            <if test="params.haixianOldMoneyStart != null ">
+                <![CDATA[  and a.haixian_old_money >= #{params.haixianOldMoneyStart}   ]]>
+            </if>
+            <if test="params.haixianOldMoneyEnd != null ">
+                <![CDATA[  and a.haixian_old_money <= #{params.haixianOldMoneyEnd}   ]]>
+            </if>
+            <if test="params.haixianNewMoneyStart != null ">
+                <![CDATA[  and a.haixian_new_money >= #{params.haixianNewMoneyStart}   ]]>
+            </if>
+            <if test="params.haixianNewMoneyEnd != null ">
+                <![CDATA[  and a.haixian_new_money <= #{params.haixianNewMoneyEnd}   ]]>
+            </if>
+            <if test="params.haixianClicknumStart != null and params.haixianClicknumStart != ''">
+                <![CDATA[  and a.haixian_clicknum >= #{params.haixianClicknumStart}   ]]>
+            </if>
+            <if test="params.haixianClicknumEnd != null and params.haixianClicknumEnd != ''">
+                <![CDATA[  and a.haixian_clicknum <= #{params.haixianClicknumEnd}   ]]>
+            </if>
+             <if test="params.haixianClicknum != null and params.haixianClicknum != ''">
+                and a.haixian_clicknum = #{params.haixianClicknum}
+             </if>
+            <if test="params.shangxiaTypes != null and params.shangxiaTypes != ''">
+                and a.shangxia_types = #{params.shangxiaTypes}
+            </if>
+            <if test="params.haixianDeleteStart != null and params.haixianDeleteStart != ''">
+                <![CDATA[  and a.haixian_delete >= #{params.haixianDeleteStart}   ]]>
+            </if>
+            <if test="params.haixianDeleteEnd != null and params.haixianDeleteEnd != ''">
+                <![CDATA[  and a.haixian_delete <= #{params.haixianDeleteEnd}   ]]>
+            </if>
+             <if test="params.haixianDelete != null and params.haixianDelete != ''">
+                and a.haixian_delete = #{params.haixianDelete}
+             </if>
+            <if test=" params.haixianContent != '' and params.haixianContent != null and params.haixianContent != 'null' ">
+                and a.haixian_content like CONCAT('%',#{params.haixianContent},'%')
+            </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
